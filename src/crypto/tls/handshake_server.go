@@ -370,7 +370,12 @@ func (hs *serverHandshakeState) doFullHandshake() error {
 		// certificates won't be used.
 		hs.finishedHash.discardHandshakeBuffer()
 	}
-	hs.finishedHash.Write(hs.clientHello.marshal())
+	if c.v2ClientHello != nil {
+		hs.finishedHash.Write(c.v2ClientHello)
+		c.v2ClientHello = nil
+	} else {
+		hs.finishedHash.Write(hs.clientHello.marshal())
+	}
 	hs.finishedHash.Write(hs.hello.marshal())
 	if _, err := c.writeRecord(recordTypeHandshake, hs.hello.marshal()); err != nil {
 		return err
