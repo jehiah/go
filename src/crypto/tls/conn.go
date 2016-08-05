@@ -579,7 +579,7 @@ func unwrapSSLv2Handshake(c *Conn, b *block) error {
 	// The spec is contradictory here -- it says challengeLen must be 32, but
 	// also specifies how to handle challenge lengths greater or less than that
 	// Anyway according to rfc2246 must have at least 16 bytes of challenge data
-	if len(challengeLen) < 16 {
+	if challengeLen < 16 {
 		return c.sendAlert(alertHandshakeFailure)
 	}
 
